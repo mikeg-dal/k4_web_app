@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>K4 Web Control with Panadapter</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/vfo-control.css">
+  <link rel="stylesheet" href="/static/sidebar.css">
+</head>
+<body>
+  <!-- Include Sidebar -->
+  <div id="sidebar-container"></div>
+  
+  <!-- Connection buttons moved to upper right corner -->
+  <div class="connection-buttons-container">
+    <button id="connectBtn" class="connect-btn" onclick="connect()">Connect to K4</button>
+    <button id="disconnectBtn" class="disconnect-btn" onclick="disconnect()" style="display:none;">Disconnect</button>
+  </div>
+
+  <div class="main-container">
+    <div style="text-align: center; margin-bottom: 2rem;">
+      <h1 style="margin-bottom: 0.5rem;">AI5QK K4 Web Control</h1>
+      <h2 style="margin-top: 0; color: var(--text-secondary); font-weight: 400; font-size: 1.2rem;">Prototype</h2>
+    </div>
+
+    <!-- Microphone Permission Panel -->
+    <div class="panel mic-permission" id="micPermissionPanel" style="display:none;">
+      <h2>Microphone Access Required</h2>
+      <p>To use the PTT (Push-to-Talk) feature, please allow microphone access.</p>
+      <button onclick="requestMicrophonePermission()">Grant Microphone Permission</button>
+      <div id="micPermissionStatus" style="margin-top: 10px; font-size: 14px; color: var(--text-muted);"></div>
+    </div>
+
+<script>
+    // Load configuration and panadapter HTML section
+    document.addEventListener('DOMContentLoaded', async () => {
+      try {
+        // Load configuration from server
+        const configPromises = [
+          fetch('/config/panadapter').then(r => r.json()),
+          fetch('/config/audio').then(r => r.json())
+        ];
+        
+        const [panConfig, audioConfig] = await Promise.all(configPromises);
+        
+        // Update panadapter configuration
+        if (typeof updatePanadapterConfig === 'function') {
+          updatePanadapterConfig(panConfig);
+          console.log('✅ Panadapter config loaded from server');
+        }
+        
+        // Store audio config globally if needed
+        window.K4AudioConfig = audioConfig;
+        console.log('✅ Audio config loaded from server');
+        
+        // Load panadapter HTML
+        const panadapterResponse = await fetch('/static/panadapter.html');
+        const panadapterHtml = await panadapterResponse.text();
+        document.getElementById('panadapter-container').innerHTML = panadapterHtml;
+        
+        // Load VFO control HTML
+        const vfoResponse = await fetch('/static/vfo-control.html');
+        const vfoHtml = await vfoResponse.text();
+        document.getElementById('vfo-control-container').innerHTML = vfoHtml;
+        
+        // Load sidebar HTML
+        const sidebarResponse = await fetch('/static/sidebar.html');
+        const sidebarHtml = await sidebarResponse.text();
+        document.getElementById('sidebar-container').innerHTML = sidebarHtml;
+        
+        // Initialize panadapter after loading
+        if (typeof initializePanadapter === 'function') {
+          initializePanadapter();
+        }
+        
+        // Initialize VFO control integration after loading
+        if (typeof initializeVFOIntegrationNew === 'function') {
+          initializeVFOIntegrationNew();
+          console.log('✅ VFO Control Panel initialized');
+        }
+        
+        // Initialize sidebar after loading
+        if (typeof initializeSidebar === 'function') {
+          initializeSidebar();
+          console.log('✅ Sidebar initialized');
+        }
+      } catch (error) {
+        console.error('Failed to load configuration or HTML components:', error);
+        document.getElementById('panadapter-container').innerHTML = 
+          '<div class="panel"><h2>Panadapter Unavailable</h2><p>Could not load panadapter.html or configuration</p></div>';
+        document.getElementById('vfo-control-container').innerHTML = 
+          '<div class="panel"><h2>VFO Control Unavailable</h2><p>Could not load vfo-control.html</p></div>';
+        document.getElementById('sidebar-container').innerHTML = 
+          '<div class="sidebar-toggle" onclick="alert(\'Sidebar unavailable\')"><div class="hamburger-line"></div><div class="hamburger-line"></div><div class="hamburger-line"></div></div>';
+      }
+    });
+  </script>
+  
+    <!-- Panadapter Section - Loaded from external file -->
+    <div id="panadapter-container"></div>
+
+    <!-- VFO Control Panel - NEW -->
+    <div id="vfo-control-container"></div>
+
+    <!-- Hidden controls for programmatic access (now handled by sidebar) -->
+    <div style="display: none;">
+      <!-- Main audio controls needed for VFO integration -->
+      <input type="range" id="mainVolumeSlider" class="slider" min="0" max="100" value="50" oninput="updateMainVolume(this.value)">
+      <input type="range" id="subVolumeSlider" class="slider" min="0" max="100" value="50" oninput="updateSubVolume(this.value)">
+      <span id="mainVolumeValue">50%</span>
+      <span id="subVolumeValue">50%</span>
+      
+      <!-- Main controls needed for sidebar synchronization -->
+      <button id="subRxToggle" class="toggle-button off" onclick="toggleSubReceiver()">OFF</button>
+      <select id="audioRoutingSelect" onchange="updateAudioRouting(this.value)">
+        <option value="a.b">Main Left, Sub Right (Default Stereo)</option>
+        <option value="ab.ab">Mix Both to Both Channels (Mono)</option>
+        <option value="a.-a">Main Left, Main Inverted Right (Binaural)</option>
+        <option value="a.ab">Main Left, Mix Right</option>
+        <option value="ab.b">Mix Left, Sub Right</option>
+        <option value="ab.a">Mix Left, Main Right</option>
+        <option value="b.ab">Sub Left, Mix Right</option>
+        <option value="b.b">Sub Both Channels</option>
+        <option value="b.a">Sub Left, Main Right</option>
+        <option value="a.a">Main Both Channels</option>
+      </select>
+      <input type="range" id="volumeSlider" class="slider" min="0" max="100" value="75" oninput="updateVolume(this.value)">
+      <input type="range" id="bufferSlider" class="slider" min="1" max="10" value="3" oninput="updateBufferSize(this.value)">
+      <input type="range" id="micGainSlider" class="slider" min="0" max="100" value="10" oninput="updateMicGain(this.value)">
+      
+      <!-- Status display elements -->
+      <span id="audioStatusDisplay">Main Only</span>
+      <span id="routingStatusDisplay">Main → Left, Sub → Right</span>
+      <span id="volumeValue">75%</span>
+      <span id="bufferValue">3</span>
+      <span id="micGainValue">10%</span>
+      <div id="processingStatus">Processing: ON</div>
+    </div>
+
+    <!-- PTT Section -->
+    <div class="ptt-section">
+      <button id="pttButton" class="ptt-button" 
+              onmousedown="startPTT()" onmouseup="stopPTT()" 
+              ontouchstart="startPTT(event)" ontouchend="stopPTT(event)"
+              disabled>
+        PTT
+      </button>
+      <div class="ptt-status">
+        <span id="pttStatus">Microphone permission required</span>
+      </div>
+      <div class="mic-stats">
+        <span id="micStats">Mic: Not active</span>
+      </div>
+    </div>
+
+    <!-- Status elements moved to sidebar - keeping hidden for synchronization -->
+    <div style="display: none;">
+      <span id="audioStatus">Audio Queue: 0</span>
+      <span id="audioContext">Audio Context: Not Started</span>
+      <span id="audioLatency">Latency: 0ms</span>
+      <span id="dualRxStatus">Dual RX: Main Only</span>
+      <span id="currentMode">EM3 (Opus 32-bit)</span>
+    </div>
+  </div>
+
+  <!-- Load configuration system first - safe and non-breaking -->
+  <script src="/static/config-loader.js"></script>
+  
+  <!-- Load radio management system -->
+  <script src="/static/radio-manager.js"></script>
+  
+  <!-- Load modular components -->
+  <script src="/static/panadapter.js"></script>
+  <script src="/static/vfo-control.js"></script>
+  <script src="/static/vfo-bridge.js"></script>
+  <script src="/static/sidebar.js"></script>
+  <script src="/static/app.js"></script>
+
+</body>
+</html>

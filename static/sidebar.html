@@ -1,0 +1,256 @@
+<!-- Responsive Sidebar Component -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<div class="sidebar" id="sidebar">
+  <!-- Sidebar Header -->
+  <div class="sidebar-header">
+    <h3>K4 Web Controller</h3>
+    <button class="sidebar-close" onclick="closeSidebar()">×</button>
+  </div>
+  
+  <!-- Sidebar Menu -->
+  <div class="sidebar-menu">
+    <div class="sidebar-item" onclick="toggleRadioManager()">
+      <div class="sidebar-icon">📻</div>
+      <span>Radio Manager</span>
+      <div class="sidebar-arrow" id="radioManagerArrow">▶</div>
+    </div>
+    
+    <div class="sidebar-item" onclick="toggleSettings()">
+      <div class="sidebar-icon">⚙️</div>
+      <span>Settings</span>
+      <div class="sidebar-arrow" id="settingsArrow">▶</div>
+    </div>
+    
+    <div class="sidebar-item" onclick="toggleSessionInfo()">
+      <div class="sidebar-icon">📈</div>
+      <span>Session Info</span>
+      <div class="sidebar-arrow" id="sessionInfoArrow">▶</div>
+    </div>
+  </div>
+  
+  <!-- Radio Manager Panel -->
+  <div class="settings-panel" id="radioManagerPanel">
+    <div class="settings-header">
+      <h4>Radio Management</h4>
+    </div>
+    
+    <div class="settings-content">
+      <!-- Active Radio Display -->
+      <div class="settings-group">
+        <label class="settings-label">Active Radio:</label>
+        <div id="activeRadioDisplay" class="radio-display">
+          <div class="radio-name">Loading...</div>
+          <div class="radio-details">Please wait...</div>
+        </div>
+      </div>
+      
+      <!-- Radio List -->
+      <div class="settings-group">
+        <label class="settings-label">Available Radios:</label>
+        <div id="radioList" class="radio-list">
+          <div class="radio-loading">Loading radio configurations...</div>
+        </div>
+      </div>
+      
+      <!-- Radio Management Buttons -->
+      <div class="settings-group">
+        <div class="radio-button-row">
+          <button class="settings-button radio-button" onclick="showAddRadioDialog()">➕ Add Radio</button>
+          <button class="settings-button radio-button" onclick="refreshRadioList()">🔄 Refresh</button>
+        </div>
+      </div>
+      
+      <!-- Connection Status -->
+      <div class="settings-group">
+        <div class="settings-status">
+          <div class="status-item">
+            <span>Status: </span>
+            <span id="radioConnectionStatus" class="status-value">Disconnected</span>
+          </div>
+          <div class="status-item">
+            <span>Last Update: </span>
+            <span id="radioLastUpdate" class="status-value">Never</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Settings Panel -->
+  <div class="settings-panel" id="settingsPanel">
+    <div class="settings-header">
+      <h4>Audio Controls</h4>
+    </div>
+    
+    <div class="settings-content">
+      <!-- Sub Receiver Control -->
+      <div class="settings-group">
+        <label class="settings-label">Sub Receiver (VFO B):</label>
+        <button id="sidebarSubRxToggle" class="settings-toggle off" onclick="toggleSubReceiver()">
+          OFF
+        </button>
+      </div>
+
+      <!-- Audio Routing Control -->
+      <div class="settings-group">
+        <label class="settings-label">Audio Routing:</label>
+        <select id="sidebarAudioRoutingSelect" class="settings-select" onchange="updateAudioRouting(this.value)">
+          <option value="a.b">Main Left, Sub Right (Default Stereo)</option>
+          <option value="ab.ab">Mix Both to Both Channels (Mono)</option>
+          <option value="a.-a">Main Left, Main Inverted Right (Binaural)</option>
+          <option value="a.ab">Main Left, Mix Right</option>
+          <option value="ab.b">Mix Left, Sub Right</option>
+          <option value="ab.a">Mix Left, Main Right</option>
+          <option value="b.ab">Sub Left, Mix Right</option>
+          <option value="b.b">Sub Both Channels</option>
+          <option value="b.a">Sub Left, Main Right</option>
+          <option value="a.a">Main Both Channels</option>
+        </select>
+        
+        <div class="settings-status">
+          <div class="status-item">
+            <span>Status: </span>
+            <span id="sidebarAudioStatusDisplay" class="status-value">Main Only</span>
+          </div>
+          <div class="status-item">
+            <span>Routing: </span>
+            <span id="sidebarRoutingStatusDisplay" class="status-value">Main → Left, Sub → Right</span>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Volume Controls -->
+      <div class="settings-group">
+        <label class="settings-label">Master Volume:</label>
+        <div class="settings-slider-container">
+          <input type="range" id="sidebarVolumeSlider" class="settings-slider" min="0" max="100" value="75" oninput="updateVolume(this.value)">
+          <span id="sidebarVolumeValue" class="settings-value">75%</span>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label class="settings-label">Buffer Size:</label>
+        <div class="settings-slider-container">
+          <input type="range" id="sidebarBufferSlider" class="settings-slider" min="1" max="10" value="3" oninput="updateBufferSize(this.value)">
+          <span id="sidebarBufferValue" class="settings-value">3</span>
+        </div>
+      </div>
+      
+      <div class="settings-group">
+        <label class="settings-label">Mic Gain:</label>
+        <div class="settings-slider-container">
+          <input type="range" id="sidebarMicGainSlider" class="settings-slider" min="0" max="100" value="10" oninput="updateMicGain(this.value)">
+          <span id="sidebarMicGainValue" class="settings-value">10%</span>
+        </div>
+      </div>
+      
+      <!-- Audio Processing Toggle -->
+      <div class="settings-group">
+        <button class="settings-button" onclick="toggleAudioProcessing()">Toggle Audio Processing</button>
+        <div id="sidebarProcessingStatus" class="settings-status-text">Processing: ON</div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Session Info Panel -->
+  <div class="settings-panel" id="sessionInfoPanel">
+    <div class="settings-header">
+      <h4>Session Info</h4>
+    </div>
+    
+    <div class="settings-content">
+      <div class="session-info-grid">
+        <div class="session-info-row">
+          <div class="session-info-item">
+            <span class="session-label">Audio Queue:</span>
+            <span id="sidebarAudioStatus" class="session-value">0</span>
+          </div>
+          <div class="session-info-item">
+            <span class="session-label">Latency:</span>
+            <span id="sidebarAudioLatency" class="session-value">0ms</span>
+          </div>
+        </div>
+        
+        <div class="session-info-row">
+          <div class="session-info-item wide">
+            <span class="session-label">Audio Context:</span>
+            <span id="sidebarAudioContext" class="session-value">Not Started</span>
+          </div>
+        </div>
+        
+        <div class="session-info-row">
+          <div class="session-info-item wide">
+            <span class="session-label">Dual RX:</span>
+            <span id="sidebarDualRxStatus" class="session-value">Main Only</span>
+          </div>
+        </div>
+        
+        <div class="session-info-row">
+          <div class="session-info-item wide">
+            <span class="session-label">Mode:</span>
+            <span id="sidebarCurrentMode" class="session-value">EM3 (Opus 32-bit)</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Radio Configuration Dialog -->
+<div class="radio-dialog-overlay" id="radioDialogOverlay" onclick="closeRadioDialog()"></div>
+<div class="radio-dialog" id="radioDialog">
+  <div class="radio-dialog-header">
+    <h3 id="radioDialogTitle">Add New Radio</h3>
+    <button class="radio-dialog-close" onclick="closeRadioDialog()">×</button>
+  </div>
+  
+  <div class="radio-dialog-content">
+    <form id="radioForm" onsubmit="return submitRadioForm(event)">
+      <div class="radio-form-group">
+        <label for="radioName">Radio Name:</label>
+        <input type="text" id="radioName" name="name" placeholder="e.g., K4 Shack" required>
+      </div>
+      
+      <div class="radio-form-group">
+        <label for="radioHost">Host/IP Address:</label>
+        <input type="text" id="radioHost" name="host" placeholder="e.g., 192.168.1.10" required>
+      </div>
+      
+      <div class="radio-form-group">
+        <label for="radioPort">Port:</label>
+        <input type="number" id="radioPort" name="port" value="9205" min="1" max="65535" required>
+      </div>
+      
+      <div class="radio-form-group">
+        <label for="radioPassword">Password:</label>
+        <input type="text" id="radioPassword" name="password" placeholder="e.g., tester" required>
+      </div>
+      
+      <div class="radio-form-group">
+        <label for="radioDescription">Description (optional):</label>
+        <input type="text" id="radioDescription" name="description" placeholder="e.g., Main shack K4 radio">
+      </div>
+      
+      <div class="radio-form-group">
+        <label>
+          <input type="checkbox" id="radioEnabled" name="enabled" checked>
+          Enable this radio
+        </label>
+      </div>
+      
+      <div class="radio-dialog-buttons">
+        <button type="button" class="radio-cancel-button" onclick="closeRadioDialog()">Cancel</button>
+        <button type="submit" class="radio-save-button">Save Radio</button>
+        <button type="button" class="radio-delete-button" id="radioDeleteButton" onclick="deleteCurrentRadio()" style="display: none;">Delete Radio</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- Sidebar Toggle Button -->
+<button class="sidebar-toggle" id="sidebarToggle" onclick="openSidebar()">
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+  <div class="hamburger-line"></div>
+</button>

@@ -1,0 +1,818 @@
+/* VFO Control Panel - Dual Row Layout with Elecraft Theme */
+
+:root {
+    /* VFO-specific variables (Elecraft colors inherited from styles.css) */
+    --background-dark: #2c2c2c;
+    --background-darker: #1a1a1a;
+    --text-primary: #e0e0e0;
+    --text-secondary: #999;
+    --border-color: #555;
+    --shadow-color: rgba(0,0,0,0.2);
+}
+
+.vfo-control-panel {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--background-dark);
+    color: var(--text-primary);
+    padding: 20px;
+    border-radius: 8px;
+    border: 1px solid var(--border-color);
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.vfo-row {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 20px;
+    margin-bottom: 15px;
+    background: linear-gradient(145deg, #333, #2a2a2a);
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 8px var(--shadow-color);
+    position: relative;
+}
+
+.vfo-row.disabled {
+    opacity: 0.6;
+    pointer-events: none;
+}
+
+/* VFO Information Section */
+.vfo-section {
+    min-width: 200px;
+    text-align: center;
+}
+
+/* VFO Badge Squares */
+.vfo-badge {
+    position: absolute;
+    top: 4px;
+    left: 4px;
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+}
+
+.vfo-badge-a {
+    background: var(--elecraft-blue);
+}
+
+.vfo-badge-b {
+    background: #66b366;
+}
+
+.vfo-header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 8px;
+}
+
+.vfo-header {
+    font-size: 16px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.frequency-display {
+    background: var(--background-darker);
+    border: 2px solid var(--border-color);
+    padding: 15px 25px;
+    border-radius: 12px;
+    font-size: 24px;
+    font-weight: bold;
+    color: var(--text-primary);
+    letter-spacing: 2px;
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.3),
+        0 2px 8px var(--shadow-color);
+    min-width: 180px;
+    text-align: center;
+    transition: all 0.2s;
+}
+
+.mode-display {
+    font-size: 14px;
+    color: var(--elecraft-blue);
+    font-weight: bold;
+    margin-top: 8px;
+}
+
+/* Knob Section */
+.knob-section {
+    position: relative;
+}
+
+.knob-container {
+    position: relative;
+    width: 80px;
+    height: 80px;
+}
+
+.vfo-knob {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, #777, #444, #222);
+    border: 2px solid var(--border-color);
+    cursor: pointer;
+    position: relative;
+    transition: border-color 0.2s;
+    box-shadow: 
+        inset 0 0 15px rgba(0,0,0,0.4),
+        0 3px 8px var(--shadow-color);
+}
+
+.vfo-knob:hover {
+    border-color: var(--elecraft-blue);
+}
+
+.vfo-knob.active {
+    border-color: var(--elecraft-blue);
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.4),
+        0 4px 12px var(--shadow-color),
+        0 0 15px rgba(74,144,226,0.3);
+}
+
+.knob-dimple {
+    position: absolute;
+    width: 18px;
+    height: 18px;
+    background: radial-gradient(circle at 30% 30%, #bbb, #777, #444);
+    border-radius: 50%;
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 
+        inset 0 2px 4px rgba(0,0,0,0.6),
+        0 1px 2px rgba(255,255,255,0.1);
+    transition: all 0.1s ease-out;
+    border: 1px solid var(--border-color);
+}
+
+
+/* Controls Section */
+.controls-section {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.band-selector-container {
+    position: relative;
+    display: inline-block;
+}
+
+.main-button {
+    background: linear-gradient(145deg, #444, #333);
+    color: var(--text-primary);
+    border: 2px solid var(--border-color);
+    padding: 12px 20px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    border-radius: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 2px 6px var(--shadow-color);
+    font-family: inherit;
+}
+
+.main-button:hover {
+    background: linear-gradient(145deg, #555, #444);
+    border-color: var(--elecraft-blue);
+    transform: translateY(-1px);
+}
+
+.band-matrix {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: #2a2a2a;
+    border: 2px solid var(--border-color);
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    z-index: 1000;
+    min-width: 400px;
+    display: none;
+}
+
+.band-matrix.open {
+    display: block;
+}
+
+.matrix-header {
+    background: #333;
+    padding: 8px;
+    border-bottom: 1px solid var(--border-color);
+    font-weight: bold;
+    text-align: center;
+}
+
+.matrix-row {
+    display: flex;
+    border-bottom: 1px solid #444;
+}
+
+.matrix-row:last-child {
+    border-bottom: none;
+}
+
+.band-button, .mode-button {
+    padding: 8px 12px;
+    border: none;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 14px;
+    transition: background 0.2s;
+    border-right: 1px solid var(--border-color);
+}
+
+.band-button {
+    min-width: 80px;
+    font-weight: bold;
+    background: #3a3a3a;
+}
+
+.band-button:hover {
+    background: var(--elecraft-blue);
+    color: white;
+}
+
+.mode-button {
+    min-width: 60px;
+    flex: 1;
+}
+
+.mode-button:hover {
+    background: var(--elecraft-blue);
+    color: white;
+}
+
+.mode-button:last-child {
+    border-right: none;
+}
+
+/* Noise Controls */
+.noise-controls {
+    display: flex;
+    gap: 15px;
+}
+
+.noise-control-group {
+    position: relative;
+    display: inline-block;
+}
+
+.noise-button, .sub-button {
+    background: linear-gradient(145deg, #444, #333);
+    color: #999;
+    border: 2px solid var(--border-color);
+    padding: 8px 14px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: bold;
+    border-radius: 8px;
+    transition: all 0.2s;
+    min-width: 50px;
+    font-family: inherit;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.noise-button.active, .sub-button.active {
+    background: linear-gradient(145deg, var(--elecraft-blue), var(--elecraft-blue-dark));
+    color: white;
+    border-color: var(--elecraft-blue);
+    box-shadow: 0 0 10px rgba(74,144,226,0.4);
+}
+
+.noise-button:hover, .sub-button:hover {
+    border-color: #888;
+    transform: translateY(-1px);
+}
+
+.noise-button.active:hover, .sub-button.active:hover {
+    border-color: var(--elecraft-blue-light);
+}
+
+/* Sub Button Corner Style for VFO B Header */
+.sub-button-corner {
+    background: linear-gradient(145deg, #444, #333);
+    color: #999;
+    border: 2px solid var(--border-color);
+    padding: 4px 8px;
+    cursor: pointer;
+    font-size: 10px;
+    font-weight: bold;
+    border-radius: 6px;
+    transition: all 0.2s;
+    min-width: 35px;
+    font-family: inherit;
+    box-shadow: 0 2px 4px var(--shadow-color);
+}
+
+.sub-button-corner.active {
+    background: linear-gradient(145deg, #66b366, #4d9a4d);
+    color: white;
+    border-color: #66b366;
+    box-shadow: 0 0 8px rgba(102,179,102,0.4);
+}
+
+.sub-button-corner:hover {
+    border-color: #888;
+    transform: translateY(-1px);
+}
+
+.sub-button-corner.active:hover {
+    border-color: #80c480;
+}
+
+.slider-popup {
+    position: absolute;
+    top: -100px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2a2a2a;
+    border: 2px solid var(--border-color);
+    border-radius: 6px;
+    padding: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.6);
+    z-index: 1000;
+    min-width: 100px;
+    display: none;
+}
+
+.slider-popup.show {
+    display: block;
+}
+
+.slider-popup::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 6px solid transparent;
+    border-top-color: var(--border-color);
+}
+
+.slider-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    margin-bottom: 8px;
+    color: var(--elecraft-blue);
+}
+
+.slider-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+}
+
+.noise-slider {
+    width: 60px;
+    height: 3px;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.noise-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 12px;
+    height: 12px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.noise-slider::-moz-range-thumb {
+    width: 12px;
+    height: 12px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.slider-value {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+    min-width: 15px;
+    text-align: center;
+}
+
+.filter-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-color);
+}
+
+.filter-header {
+    text-align: center;
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+}
+
+.filter-options {
+    display: flex;
+    gap: 4px;
+}
+
+.filter-option {
+    background: linear-gradient(145deg, #444, #333);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 4px 8px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    font-weight: bold;
+    transition: all 0.2s;
+    min-width: 40px;
+}
+
+.filter-option:hover {
+    background: linear-gradient(145deg, #555, #444);
+    border-color: #888;
+}
+
+.filter-option.active {
+    background: linear-gradient(145deg, var(--elecraft-blue), var(--elecraft-blue-dark));
+    border-color: var(--elecraft-blue);
+    color: white;
+    box-shadow: 0 0 6px rgba(74,144,226,0.4);
+}
+
+.step-options {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.step-option {
+    background: linear-gradient(145deg, #444, #333);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 4px 8px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 10px;
+    transition: all 0.2s;
+    min-width: 40px;
+}
+
+.step-option:hover {
+    background: linear-gradient(145deg, #555, #444);
+    border-color: #888;
+}
+
+.step-option.active {
+    background: linear-gradient(145deg, var(--elecraft-blue), var(--elecraft-blue-dark));
+    border-color: var(--elecraft-blue);
+    color: white;
+    box-shadow: 0 0 6px rgba(74,144,226,0.4);
+}
+
+/* Volume Section - Compact version for under Band/Mode */
+.volume-section-compact {
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid var(--border-color);
+}
+
+.volume-header-compact {
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    margin-bottom: 6px;
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.volume-container-compact {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.volume-slider-compact {
+    width: 70px;
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider-compact::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.volume-slider-compact::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.volume-value-compact {
+    font-size: 11px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+    min-width: 25px;
+    text-align: center;
+}
+
+/* Legacy Volume Section (kept for compatibility if needed) */
+.volume-section {
+    min-width: 120px;
+    text-align: center;
+}
+
+.volume-header {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--text-secondary);
+    margin-bottom: 8px;
+}
+
+.volume-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.volume-slider {
+    width: 80px;
+    height: 4px;
+    background: #444;
+    border-radius: 2px;
+    outline: none;
+    appearance: none;
+    -webkit-appearance: none;
+    cursor: pointer;
+}
+
+.volume-slider::-webkit-slider-thumb {
+    appearance: none;
+    width: 14px;
+    height: 14px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.volume-slider::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    background: var(--elecraft-blue);
+    border-radius: 50%;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 0 4px rgba(74,144,226,0.5);
+}
+
+.volume-value {
+    font-size: 12px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+    min-width: 20px;
+}
+
+
+/* VFO A Blue Hover Styling for NB, NR, Step buttons */
+#vfoARow .noise-button:hover {
+    border-color: var(--elecraft-blue);
+}
+
+#vfoARow .step-option:hover {
+    border-color: var(--elecraft-blue);
+}
+
+/* VFO B Green Styling */
+#vfoBRow .vfo-header {
+    color: #66b366;
+}
+
+#vfoBRow .mode-display {
+    color: #66b366;
+}
+
+#vfoBRow .vfo-knob:hover {
+    border-color: #66b366;
+}
+
+#vfoBRow .vfo-knob.active {
+    border-color: #66b366;
+    box-shadow: 
+        inset 0 0 20px rgba(0,0,0,0.4),
+        0 4px 12px var(--shadow-color),
+        0 0 15px rgba(102,179,102,0.3);
+}
+
+#vfoBRow .main-button:hover {
+    border-color: #66b366;
+}
+
+#vfoBRow .sub-button.active {
+    background: linear-gradient(145deg, #66b366, #4d9a4d);
+    color: white;
+    border-color: #66b366;
+    box-shadow: 0 0 10px rgba(102,179,102,0.4);
+}
+
+/* VFO B Green Hover Styling for NB, NR, Step buttons */
+#vfoBRow .noise-button:hover {
+    border-color: #66b366;
+}
+
+#vfoBRow .step-option:hover {
+    border-color: #66b366;
+}
+
+/* VFO B Green Volume Slider Theming */
+#vfoBRow .volume-slider-compact::-webkit-slider-thumb {
+    background: #66b366;
+    box-shadow: 0 0 4px rgba(102,179,102,0.5);
+}
+
+#vfoBRow .volume-slider-compact::-moz-range-thumb {
+    background: #66b366;
+    box-shadow: 0 0 4px rgba(102,179,102,0.5);
+}
+
+#vfoBRow .volume-value-compact {
+    color: #66b366;
+}
+
+/* VFO B Green Slider Popup Theming */
+#vfoBRow .slider-header {
+    color: #66b366;
+}
+
+#vfoBRow .slider-value {
+    color: #66b366;
+}
+
+#vfoBRow .filter-header {
+    color: #66b366;
+}
+
+#vfoBRow .noise-slider::-webkit-slider-thumb {
+    background: #66b366;
+    box-shadow: 0 0 4px rgba(102,179,102,0.5);
+}
+
+#vfoBRow .noise-slider::-moz-range-thumb {
+    background: #66b366;
+    box-shadow: 0 0 4px rgba(102,179,102,0.5);
+}
+
+/* VFO B Green Filter Option Buttons (None, Narrow, Wide) */
+#vfoBRow .filter-option:hover {
+    border-color: #66b366;
+}
+
+#vfoBRow .filter-option.active {
+    background: linear-gradient(145deg, #66b366, #4d9a4d);
+    border-color: #66b366;
+    color: white;
+    box-shadow: 0 0 6px rgba(102,179,102,0.4);
+}
+
+/* Filter Mode Toggle Button */
+.filter-mode-toggle {
+    background: linear-gradient(145deg, #444, #333);
+    color: var(--text-primary);
+    border: 1px solid var(--border-color);
+    padding: 6px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-family: inherit;
+    font-size: 11px;
+    font-weight: bold;
+    transition: all 0.2s;
+    margin-bottom: 8px;
+    min-width: 60px;
+}
+
+.filter-mode-toggle:hover {
+    background: linear-gradient(145deg, #555, #444);
+    border-color: var(--elecraft-blue);
+}
+
+.filter-mode-toggle:active {
+    background: linear-gradient(145deg, var(--elecraft-blue), var(--elecraft-blue-dark));
+    color: white;
+}
+
+/* Filter Slider Stack */
+.filter-slider-stack {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.filter-slider-row {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.filter-slider-label {
+    font-size: 10px;
+    font-weight: bold;
+    color: var(--elecraft-blue);
+    min-width: 20px;
+    text-align: left;
+}
+
+/* VFO B Green Filter Mode Toggle Button */
+#vfoBRow .filter-mode-toggle:hover {
+    border-color: #66b366;
+}
+
+#vfoBRow .filter-mode-toggle:active {
+    background: linear-gradient(145deg, #66b366, #4d9a4d);
+    color: white;
+}
+
+#vfoBRow .filter-slider-label {
+    color: #66b366;
+}
+
+/* Responsive Design */
+@media (max-width: 1100px) {
+    .vfo-row {
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    
+    .controls-section {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .vfo-header-container {
+        flex-direction: column;
+        align-items: center;
+        gap: 4px;
+    }
+    
+    .sub-button-corner {
+        font-size: 9px;
+        padding: 3px 6px;
+        min-width: 30px;
+    }
+}
+
+/* Add top margin to VFO B header container to avoid overlap with badge */
+#vfoBRow .vfo-header-container {
+    margin-top: 8px;
+}

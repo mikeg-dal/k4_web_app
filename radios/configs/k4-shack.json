@@ -1,0 +1,9 @@
+{
+  "name": "K4 Shack",
+  "host": "192.168.1.10",
+  "port": 9205,
+  "password": "tester",
+  "enabled": true,
+  "last_connected": "2025-09-14T08:40:38.918431",
+  "description": "Main station K4 in the shack"
+}

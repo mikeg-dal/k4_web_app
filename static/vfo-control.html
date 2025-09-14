@@ -1,0 +1,254 @@
+<!-- VFO Control Panel - Dual Row Layout -->
+<div class="vfo-control-panel">
+    <!-- VFO A Row -->
+    <div class="vfo-row" id="vfoARow">
+        <div class="vfo-badge vfo-badge-a">A</div>
+        <div class="vfo-section">
+            <div class="vfo-header-container">
+            </div>
+            <div class="frequency-display" id="vfoAFreq">---.---.---</div>
+            <div class="mode-display" id="vfoAMode">---</div>
+        </div>
+        
+        <div class="knob-section">
+            <div class="knob-container">
+                <div class="vfo-knob" id="vfoAKnob">
+                    <div class="knob-dimple" id="vfoAKnobDimple"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls-section">
+            <!-- Band/Mode Control -->
+            <div class="band-selector-container">
+                <button class="main-button" id="vfoABandButton" onclick="toggleBandMatrix('A')">
+                    BAND/MODE ▼
+                </button>
+                <div class="band-matrix" id="vfoABandMatrix">
+                    <div class="matrix-header">Select Band or Band + Mode</div>
+                    <div id="vfoABandMatrixContent"></div>
+                </div>
+                
+                <!-- VFO A Volume Control (moved under Band/Mode) -->
+                <div class="volume-section-compact">
+                    <div class="volume-header-compact">VFO A VOL</div>
+                    <div class="volume-container-compact">
+                        <input type="range" class="volume-slider-compact" id="vfoAVolumeSlider" min="0" max="100" value="0">
+                        <div class="volume-value-compact" id="vfoAVolumeValue">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Noise Controls -->
+            <div class="noise-controls">
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoANBButton" data-vfo="A" data-type="NB">
+                        NB
+                    </button>
+                    <div class="slider-popup" id="vfoANBSlider">
+                        <div class="slider-header">NOISE BLANKER</div>
+                        <div class="slider-container">
+                            <input type="range" class="noise-slider" min="1" max="25" value="5" 
+                                   oninput="updateNoiseLevel('A', 'NB', this.value)">
+                            <div class="slider-value" id="vfoANBValue">5</div>
+                        </div>
+                        <div class="filter-container">
+                            <div class="filter-header">FILTER</div>
+                            <div class="filter-options">
+                                <button class="filter-option active" data-filter="0" onclick="setNBFilter('A', 0)">None</button>
+                                <button class="filter-option" data-filter="1" onclick="setNBFilter('A', 1)">Narrow</button>
+                                <button class="filter-option" data-filter="2" onclick="setNBFilter('A', 2)">Wide</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoANRButton" data-vfo="A" data-type="NR">
+                        NR
+                    </button>
+                    <div class="slider-popup" id="vfoANRSlider">
+                        <div class="slider-header">NOISE REDUCTION</div>
+                        <div class="slider-container">
+                            <input type="range" class="noise-slider" min="1" max="10" value="3" 
+                                   oninput="updateNoiseLevel('A', 'NR', this.value)">
+                            <div class="slider-value" id="vfoANRValue">3</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoAStepButton" data-vfo="A" onclick="toggleStepSlider('A')">
+                        STEP
+                    </button>
+                    <div class="slider-popup" id="vfoAStepSlider">
+                        <div class="slider-header">TUNING STEP</div>
+                        <div class="slider-container">
+                            <div class="step-options">
+                                <button class="step-option" data-step="1" onclick="setStep('A', 1)">1Hz</button>
+                                <button class="step-option" data-step="10" onclick="setStep('A', 10)">10Hz</button>
+                                <button class="step-option active" data-step="100" onclick="setStep('A', 100)">100Hz</button>
+                                <button class="step-option" data-step="1000" onclick="setStep('A', 1000)">1kHz</button>
+                                <button class="step-option" data-step="10000" onclick="setStep('A', 10000)">10kHz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoAFilterButton" data-vfo="A" onclick="cycleFilter('A')" onmousedown="startFilterHold('A')" onmouseup="stopFilterHold('A')" ontouchstart="startFilterHold('A')" ontouchend="stopFilterHold('A')">
+                        FIL1
+                    </button>
+                    <div class="slider-popup" id="vfoAFilterSlider">
+                        <div class="slider-header">FILTER CONTROL (BW/SHFT)</div>
+                        <div class="slider-container">
+                            <div class="filter-slider-stack">
+                                <div class="filter-slider-row">
+                                    <span class="filter-slider-label" id="vfoAFilterLabel1">BW</span>
+                                    <input type="range" class="noise-slider" id="vfoAFilterSlider1" min="0" max="100" value="0" 
+                                           oninput="updateFilterValue('A', 'high', this.value)">
+                                    <div class="slider-value" id="vfoAFilterValue1">0</div>
+                                </div>
+                                <div class="filter-slider-row">
+                                    <span class="filter-slider-label" id="vfoAFilterLabel2">SHFT</span>
+                                    <input type="range" class="noise-slider" id="vfoAFilterSlider2" min="0" max="100" value="25" 
+                                           oninput="updateFilterValue('A', 'low', this.value)">
+                                    <div class="slider-value" id="vfoAFilterValue2">25</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VFO B Row -->
+    <div class="vfo-row" id="vfoBRow">
+        <div class="vfo-badge vfo-badge-b">B</div>
+        <div class="vfo-section">
+            <div class="vfo-header-container">
+                <!-- Sub RX Button moved to top right -->
+                <button class="sub-button-corner" id="vfoSubButton" onclick="toggleSubRX()">
+                    SUB
+                </button>
+            </div>
+            <div class="frequency-display" id="vfoBFreq">---.---.---</div>
+            <div class="mode-display" id="vfoBMode">---</div>
+        </div>
+        
+        <div class="knob-section">
+            <div class="knob-container">
+                <div class="vfo-knob" id="vfoBKnob">
+                    <div class="knob-dimple" id="vfoBKnobDimple"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="controls-section">
+            <!-- Band/Mode Control -->
+            <div class="band-selector-container">
+                <button class="main-button" id="vfoBBandButton" onclick="toggleBandMatrix('B')">
+                    BAND/MODE ▼
+                </button>
+                <div class="band-matrix" id="vfoBBandMatrix">
+                    <div class="matrix-header">Select Band or Band + Mode</div>
+                    <div id="vfoBBandMatrixContent"></div>
+                </div>
+                
+                <!-- VFO B Volume Control (moved under Band/Mode) -->
+                <div class="volume-section-compact">
+                    <div class="volume-header-compact">VFO B VOL</div>
+                    <div class="volume-container-compact">
+                        <input type="range" class="volume-slider-compact" id="vfoBVolumeSlider" min="0" max="100" value="0">
+                        <div class="volume-value-compact" id="vfoBVolumeValue">0</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Noise Controls -->
+            <div class="noise-controls">
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoBNBButton" data-vfo="B" data-type="NB">
+                        NB
+                    </button>
+                    <div class="slider-popup" id="vfoBNBSlider">
+                        <div class="slider-header">NOISE BLANKER</div>
+                        <div class="slider-container">
+                            <input type="range" class="noise-slider" min="1" max="25" value="5" 
+                                   oninput="updateNoiseLevel('B', 'NB', this.value)">
+                            <div class="slider-value" id="vfoBNBValue">5</div>
+                        </div>
+                        <div class="filter-container">
+                            <div class="filter-header">FILTER</div>
+                            <div class="filter-options">
+                                <button class="filter-option active" data-filter="0" onclick="setNBFilter('B', 0)">None</button>
+                                <button class="filter-option" data-filter="1" onclick="setNBFilter('B', 1)">Narrow</button>
+                                <button class="filter-option" data-filter="2" onclick="setNBFilter('B', 2)">Wide</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoBNRButton" data-vfo="B" data-type="NR">
+                        NR
+                    </button>
+                    <div class="slider-popup" id="vfoBNRSlider">
+                        <div class="slider-header">NOISE REDUCTION</div>
+                        <div class="slider-container">
+                            <input type="range" class="noise-slider" min="1" max="10" value="3" 
+                                   oninput="updateNoiseLevel('B', 'NR', this.value)">
+                            <div class="slider-value" id="vfoBNRValue">3</div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoBStepButton" data-vfo="B" onclick="toggleStepSlider('B')">
+                        STEP
+                    </button>
+                    <div class="slider-popup" id="vfoBStepSlider">
+                        <div class="slider-header">TUNING STEP</div>
+                        <div class="slider-container">
+                            <div class="step-options">
+                                <button class="step-option" data-step="1" onclick="setStep('B', 1)">1Hz</button>
+                                <button class="step-option" data-step="10" onclick="setStep('B', 10)">10Hz</button>
+                                <button class="step-option active" data-step="100" onclick="setStep('B', 100)">100Hz</button>
+                                <button class="step-option" data-step="1000" onclick="setStep('B', 1000)">1kHz</button>
+                                <button class="step-option" data-step="10000" onclick="setStep('B', 10000)">10kHz</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="noise-control-group">
+                    <button class="noise-button" id="vfoBFilterButton" data-vfo="B" onclick="cycleFilter('B')" onmousedown="startFilterHold('B')" onmouseup="stopFilterHold('B')" ontouchstart="startFilterHold('B')" ontouchend="stopFilterHold('B')">
+                        FIL1
+                    </button>
+                    <div class="slider-popup" id="vfoBFilterSlider">
+                        <div class="slider-header">FILTER CONTROL (BW/SHFT)</div>
+                        <div class="slider-container">
+                            <div class="filter-slider-stack">
+                                <div class="filter-slider-row">
+                                    <span class="filter-slider-label" id="vfoBFilterLabel1">BW</span>
+                                    <input type="range" class="noise-slider" id="vfoBFilterSlider1" min="0" max="100" value="0" 
+                                           oninput="updateFilterValue('B', 'high', this.value)">
+                                    <div class="slider-value" id="vfoBFilterValue1">0</div>
+                                </div>
+                                <div class="filter-slider-row">
+                                    <span class="filter-slider-label" id="vfoBFilterLabel2">SHFT</span>
+                                    <input type="range" class="noise-slider" id="vfoBFilterSlider2" min="0" max="100" value="25" 
+                                           oninput="updateFilterValue('B', 'low', this.value)">
+                                    <div class="slider-value" id="vfoBFilterValue2">25</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
