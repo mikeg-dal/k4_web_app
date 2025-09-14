@@ -34,7 +34,7 @@ A modern web-based remote control interface for Elecraft K4 transceivers, featur
 ### 1. Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/k4_web_app.git
+git clone https://github.com/mikeg-dal/k4_web_app.git
 cd k4_web_app
 ```
 
